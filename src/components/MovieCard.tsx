@@ -12,8 +12,8 @@ export default function MovieCard({ movie, genres }: Props) {
 
   return (
     <article className="card">
-      {movie.poster_patch ? (
-        <img src={`${IMG_BASE}${movie.poster_patch}`} alt={movie.title} />
+      {movie.poster_path ? (
+        <img src={`${IMG_BASE}${movie.poster_path}`} alt={movie.title} />
       ) : (
         <div className="placeholder">No poster available</div>
       )}
