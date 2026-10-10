@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { getTrending } from "../api/tmbd";
-import type { Movie } from "../types/tmbd";
+import { getGenres, getTrending } from "../api/tmbd";
+import type { Genre, Movie } from "../types/tmbd";
 import MovieCard from "../components/MovieCard";
 
 export default function Home() {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loadingMovies, setLoadingMovies] = useState(true);
+  const [loadingGenres, setLoadingGenres] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [genres, setGenres] = useState<Genre[]>([]);
 
   useEffect(() => {
     let ignore = false;
@@ -16,7 +18,7 @@ export default function Home() {
     }).catch((err: unknown) => {
       if (!ignore) setError(err instanceof Error ? err.message : "An unknown error occurred");
     }).finally(() => {
-      if (!ignore) setLoading(false);
+      if (!ignore) setLoadingMovies(false);
     })
 
     return () => {
@@ -24,7 +26,21 @@ export default function Home() {
     }
   }, []);
 
-  if (loading) return <div>Loading...</div>;
+  useEffect(() => {
+    let ignore = false;
+    getGenres().then((data) => {
+      if (!ignore) setGenres(data.genres);
+    }).catch((err: unknown) => {
+      if (!ignore) setError(err instanceof Error ? err.message : "An unknown error occurred");
+    }).finally(() => {
+      if (!ignore) setLoadingGenres(false);
+    });
+    return () => {
+      ignore = true;
+    };
+  }, []);
+
+  if (loadingMovies || loadingGenres) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -32,7 +48,7 @@ export default function Home() {
       <h2>Trending Movies</h2>
       <div className="grid">
         {movies.map((movie) =>
-          <MovieCard key={movie.id} movie={movie} />
+          <MovieCard key={movie.id} movie={movie} genres={genres} />
         )}
       </div>
     </section>

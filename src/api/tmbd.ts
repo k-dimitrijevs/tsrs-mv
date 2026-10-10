@@ -1,4 +1,4 @@
-import type { Movie, PagedResponse } from "../types/tmbd";
+import type { Genre, Movie, PagedResponse } from "../types/tmbd";
 
 const BASE = "https://api.themoviedb.org/3";
 
@@ -21,3 +21,6 @@ export const getTrending = () =>
 
 export const searchMovies = (query: string) =>
   tmdbFetch<PagedResponse<Movie>>(`/search/movie?query=${encodeURIComponent(query)}`);
+
+export const getGenres = () =>
+  tmdbFetch<{ genres: Genre[] }>("/genre/movie/list");
