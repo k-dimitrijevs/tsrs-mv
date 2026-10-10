@@ -16,9 +16,8 @@ async function tmdbFetch<T>(path: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-export const getTrending = () => {
+export const getTrending = () =>
   tmdbFetch<PagedResponse<Movie>>("/trending/movie/week");
-}
 
 export const searchMovies = (query: string) =>
   tmdbFetch<PagedResponse<Movie>>(`/search/movie?query=${encodeURIComponent(query)}`);
