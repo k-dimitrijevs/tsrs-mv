@@ -46,7 +46,7 @@ export default function Home() {
   return (
     <section>
       <h2>Trending Movies</h2>
-      <div className="grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {movies.map((movie) =>
           <MovieCard key={movie.id} movie={movie} genres={genres} />
         )}
